@@ -1,3 +1,0 @@
-[submodule "ext/wiringpi/WiringPi"]
-	path = ext/wiringpi/WiringPi
-	url = https://github.com/WiringPi/WiringPi.git
