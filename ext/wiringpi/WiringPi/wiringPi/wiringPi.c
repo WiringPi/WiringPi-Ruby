@@ -521,7 +521,7 @@ int wiringPiFailure (char *message, ...)
     vsnprintf (buffer, 1023, message, argp) ;
   va_end (argp) ;
 
-  fprintf (stderr, buffer) ;
+  fprintf(stderr,"%s",buffer) ;
   exit (EXIT_FAILURE) ;
 
   return 0 ;
