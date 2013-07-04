@@ -90,15 +90,15 @@ module WiringPi
 	end
 
 	def wiringpi_isr(pin, mode, fn)
-	  Wiringpi.wiringPiISR(pin, mode, fn)
+	  Wiringpi2.wiringPiISR(pin, mode, fn)
 	end
 
 	def shift_out(dpin, cpin, order, val )
-	  Wiringpi.shiftOut(dpin,cpin,order,val)
+	  Wiringpi2.shiftOut(dpin,cpin,order,val)
 	end
 
 	def shift_in(dpin, cpin, order)
-	  Wiringpi.shiftIn(dpin,cpin,order)
+	  Wiringpi2.shiftIn(dpin,cpin,order)
 	end
 
     def add_module(module_instance)
