@@ -69,6 +69,18 @@ module WiringPi
 	  return Wiringpi2.micros()
 	end
 
+       def pi_board_rev()
+          return Wiringpi2.piBoardRev()
+       end
+
+       def wpi_pin_to_gpio(pin)
+          return Wiringpi2.wpiPinToGpio(pin)
+       end
+
+       def phys_pin_to_gpio(pin)
+          return Wiringpi2.physPinToGpio(pin)
+       end
+
 	def pwm_set_mode(mode)
 	  return Wiringpi2.pwmSetMode(mode)
 	end
