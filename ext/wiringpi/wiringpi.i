@@ -42,6 +42,11 @@ extern void pwmWrite            (int pin, int value) ;
 extern int  analogRead          (int pin) ;
 extern void analogWrite         (int pin, int value) ;
 
+// Raspberry Pi Specifics
+extern int  piBoardRev          (void) ;
+extern int  wpiPinToGpio        (int wPiPin) ;
+extern int  physPinToGpio       (int physPin) ;
+
 // Interrupts
 
 extern int  (*waitForInterrupt) (int pin, int mS) ;

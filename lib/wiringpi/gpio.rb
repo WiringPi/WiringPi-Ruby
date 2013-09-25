@@ -9,7 +9,7 @@ module WiringPi
     def initialize(&block)
       Wiringpi2.wiringPiSetup
       @pins = Array.new
-      instance_eval &block
+      instance_eval &block if block_given?
     end
 
     def read_byte(starting_pin)
@@ -53,6 +53,10 @@ module WiringPi
       Wiringpi2.pinMode(pin, mode)
     end
 
+    def pull_up_dn_control(pin,mode)
+      Wiringpi2.pullUpDnControl(pin, mode)
+    end
+
 	def delay(ms)
 	  Wiringpi2.delay(ms)
 	end
@@ -68,6 +72,18 @@ module WiringPi
 	def micros()
 	  return Wiringpi2.micros()
 	end
+
+       def pi_board_rev()
+          return Wiringpi2.piBoardRev()
+       end
+
+       def wpi_pin_to_gpio(pin)
+          return Wiringpi2.wpiPinToGpio(pin)
+       end
+
+       def phys_pin_to_gpio(pin)
+          return Wiringpi2.physPinToGpio(pin)
+       end
 
 	def pwm_set_mode(mode)
 	  return Wiringpi2.pwmSetMode(mode)
@@ -90,15 +106,15 @@ module WiringPi
 	end
 
 	def wiringpi_isr(pin, mode, fn)
-	  Wiringpi.wiringPiISR(pin, mode, fn)
+	  Wiringpi2.wiringPiISR(pin, mode, fn)
 	end
 
 	def shift_out(dpin, cpin, order, val )
-	  Wiringpi.shiftOut(dpin,cpin,order,val)
+	  Wiringpi2.shiftOut(dpin,cpin,order,val)
 	end
 
 	def shift_in(dpin, cpin, order)
-	  Wiringpi.shiftIn(dpin,cpin,order)
+	  Wiringpi2.shiftIn(dpin,cpin,order)
 	end
 
     def add_module(module_instance)

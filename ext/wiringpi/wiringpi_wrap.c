@@ -2329,6 +2329,70 @@ fail:
 
 
 SWIGINTERN VALUE
+_wrap_piBoardRev(int argc, VALUE *argv, VALUE self) {
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 0) || (argc > 0)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 0)",argc); SWIG_fail;
+  }
+  result = (int)piBoardRev();
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_wpiPinToGpio(int argc, VALUE *argv, VALUE self) {
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","wpiPinToGpio", 1, argv[0] ));
+  } 
+  arg1 = (int)(val1);
+  result = (int)wpiPinToGpio(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
+_wrap_physPinToGpio(int argc, VALUE *argv, VALUE self) {
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int result;
+  VALUE vresult = Qnil;
+  
+  if ((argc < 1) || (argc > 1)) {
+    rb_raise(rb_eArgError, "wrong # of arguments(%d for 1)",argc); SWIG_fail;
+  }
+  ecode1 = SWIG_AsVal_int(argv[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), Ruby_Format_TypeError( "", "int","physPinToGpio", 1, argv[0] ));
+  } 
+  arg1 = (int)(val1);
+  result = (int)physPinToGpio(arg1);
+  vresult = SWIG_From_int((int)(result));
+  return vresult;
+fail:
+  return Qnil;
+}
+
+
+SWIGINTERN VALUE
 _wrap_waitForInterrupt_get(VALUE self) {
   VALUE _val;
   
@@ -4256,6 +4320,9 @@ SWIGEXPORT void Init_wiringpi2(void) {
   rb_define_module_function(mWiringpi2, "pwmWrite", _wrap_pwmWrite, -1);
   rb_define_module_function(mWiringpi2, "analogRead", _wrap_analogRead, -1);
   rb_define_module_function(mWiringpi2, "analogWrite", _wrap_analogWrite, -1);
+  rb_define_module_function(mWiringpi2, "piBoardRev", _wrap_piBoardRev, -1);
+  rb_define_module_function(mWiringpi2, "wpiPinToGpio", _wrap_wpiPinToGpio, -1);
+  rb_define_module_function(mWiringpi2, "physPinToGpio", _wrap_physPinToGpio, -1);
   rb_define_singleton_method(mWiringpi2, "waitForInterrupt", _wrap_waitForInterrupt_get, 0);
   rb_define_singleton_method(mWiringpi2, "waitForInterrupt=", _wrap_waitForInterrupt_set, 1);
   rb_define_module_function(mWiringpi2, "wiringPiISR", _wrap_wiringPiISR, -1);
