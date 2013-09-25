@@ -53,6 +53,10 @@ module WiringPi
       Wiringpi2.pinMode(pin, mode)
     end
 
+    def pull_up_dn_control(pin,mode)
+      Wiringpi2.pullUpDnControl(pin, mode)
+    end
+
 	def delay(ms)
 	  Wiringpi2.delay(ms)
 	end
