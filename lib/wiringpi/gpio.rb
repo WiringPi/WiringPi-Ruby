@@ -9,7 +9,7 @@ module WiringPi
     def initialize(&block)
       Wiringpi2.wiringPiSetup
       @pins = Array.new
-      instance_eval &block
+      instance_eval &block if block_given?
     end
 
     def read_byte(starting_pin)
