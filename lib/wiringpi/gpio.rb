@@ -97,6 +97,14 @@ module WiringPi
 	  return Wiringpi2.pwmSetClock(divisor)
 	end
 
+  def soft_pwm_create(pin, initial_value, pwm_range)
+    return Wiringpi2.softPwmCreate(pin, initial_value, pwm_range)
+  end
+
+  def soft_pwm_write(pin, value)
+    Wiringpi2.softPwmWrite(pin, value)
+  end
+
 	def gpio_clock_set(pin, freq)
 	  return Wiringpi2.gpioClockSet(pin, freq)
 	end
