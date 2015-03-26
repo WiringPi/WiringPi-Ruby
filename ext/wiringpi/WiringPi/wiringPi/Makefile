@@ -1,8 +1,8 @@
-# ;
+#
 # Makefile:
 #	wiringPi - Wiring Compatable library for the Raspberry Pi
 #
-#	Copyright (c) 2012 Gordon Henderson
+#	Copyright (c) 2012-2015 Gordon Henderson
 #################################################################################
 # This file is part of wiringPi:
 #	https://projects.drogon.net/raspberry-pi/wiringpi/
@@ -21,10 +21,7 @@
 #    along with wiringPi.  If not, see <http://www.gnu.org/licenses/>.
 #################################################################################
 
-DYN_VERS_MAJ=2
-DYN_VERS_MIN=0
-
-VERSION=$(DYN_VERS_MAJ).$(DYN_VERS_MIN)
+VERSION=$(shell cat ../VERSION)
 DESTDIR=/usr
 PREFIX=/local
 
@@ -35,11 +32,11 @@ DYNAMIC=libwiringPi.so.$(VERSION)
 DEBUG	= -O2
 CC	= gcc
 INCLUDE	= -I.
-CFLAGS	= $(DEBUG) -Wall $(INCLUDE) -Winline -pipe -fPIC
+DEFS	= -D_GNU_SOURCE
+CFLAGS	= $(DEBUG) $(DEFS) -Wformat=2 -Wall -Winline $(INCLUDE) -pipe -fPIC
 
 LIBS    =
 
-# Should not alter anything below this line
 ###############################################################################
 
 SRC	=	wiringPi.c						\
@@ -47,10 +44,30 @@ SRC	=	wiringPi.c						\
 		piHiPri.c piThread.c					\
 		wiringPiSPI.c wiringPiI2C.c				\
 		softPwm.c softTone.c					\
-		mcp23s08.c mcp23008.c					\
-		mcp23s17.c mcp23017.c sr595.c				\
-		piFace.c gertboard.c					\
-		piNes.c ds1302.c lcd.c
+		mcp23008.c mcp23016.c mcp23017.c			\
+		mcp23s08.c mcp23s17.c					\
+		sr595.c							\
+		pcf8574.c pcf8591.c					\
+		mcp3002.c mcp3004.c mcp4802.c mcp3422.c			\
+		max31855.c max5322.c					\
+		sn3218.c						\
+		drcSerial.c						\
+		wpiExtensions.c
+
+HEADERS =	wiringPi.h						\
+		wiringSerial.h wiringShift.h				\
+		wiringPiSPI.h wiringPiI2C.h				\
+		softPwm.h softTone.h					\
+		mcp23008.h mcp23016.h mcp23017.h			\
+		mcp23s08.h mcp23s17.h					\
+		sr595.h							\
+		pcf8574.h pcf8591.h					\
+		mcp3002.h mcp3004.h mcp4802.h mcp3422.h			\
+		max31855.h max5322.h					\
+		sn3218.h						\
+		drcSerial.h						\
+		wpiExtensions.h 
+
 
 OBJ	=	$(SRC:.c=.o)
 
@@ -72,92 +89,88 @@ $(DYNAMIC):	$(OBJ)
 	@echo [Compile] $<
 	@$(CC) -c $(CFLAGS) $< -o $@
 
-.PHONEY:	clean
-clean:
-	rm -f $(OBJ) $(OBJ_I2C) *~ core tags Makefile.bak libwiringPi.*
 
-.PHONEY:	tags
+.PHONY:	clean
+clean:
+	@echo "[Clean]"
+	@rm -f $(OBJ) $(OBJ_I2C) *~ core tags Makefile.bak libwiringPi.*
+
+.PHONY:	tags
 tags:	$(SRC)
 	@echo [ctags]
 	@ctags $(SRC)
 
-.PHONEY:	install
+
+.PHONY:	install
 install:	$(DYNAMIC)
-	@echo "[Install]"
-	@install -m 0755 -d			$(DESTDIR)$(PREFIX)/lib
-	@install -m 0755 -d			$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 wiringPi.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 wiringSerial.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 wiringShift.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 gertboard.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 piFace.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 piNes.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 ds1302.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 softPwm.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 softTone.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 lcd.h			$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 wiringPiSPI.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 wiringPiI2C.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 mcp23008.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 mcp23017.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 mcp23s08.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 mcp23s17.h		$(DESTDIR)$(PREFIX)/include
-	@install -m 0644 sr595.h		$(DESTDIR)$(PREFIX)/include
+	@echo "[Install Headers]"
+	@install -m 0755 -d						$(DESTDIR)$(PREFIX)/include
+	@install -m 0644 $(HEADERS)					$(DESTDIR)$(PREFIX)/include
+	@echo "[Install Dynamic Lib]"
+	@install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
 	@install -m 0755 libwiringPi.so.$(VERSION)			$(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)
 	@ln -sf $(DESTDIR)$(PREFIX)/lib/libwiringPi.so.$(VERSION)	$(DESTDIR)/lib/libwiringPi.so
 	@ldconfig
 
-.PHONEY:	install-static
+.PHONY:	install-static
 install-static:	$(STATIC)
-	@echo "[Install Static]"
-	@install -m 0755 libwiringPi.a		$(DESTDIR)$(PREFIX)/lib
+	@echo "[Install Headers]"
+	@install -m 0755 -d						$(DESTDIR)$(PREFIX)/include
+	@install -m 0644 $(HEADERS)					$(DESTDIR)$(PREFIX)/include
+	@echo "[Install Static Lib]"
+	@install -m 0755 -d						$(DESTDIR)$(PREFIX)/lib
+	@install -m 0755 libwiringPi.a					$(DESTDIR)$(PREFIX)/lib
 
-.PHONEY:	uninstall
+.PHONY:	install-deb
+install-deb:	$(DYNAMIC)
+	@echo "[Install Headers: deb]"
+	@install -m 0755 -d							~/wiringPi/debian/wiringPi/usr/include
+	@install -m 0644 $(HEADERS)						~/wiringPi/debian/wiringPi/usr/include
+	@echo "[Install Dynamic Lib: deb]"
+	install -m 0755 -d							~/wiringPi/debian/wiringPi/usr/lib
+	install -m 0755 libwiringPi.so.$(VERSION)				~/wiringPi/debian/wiringPi/usr/lib/libwiringPi.so.$(VERSION)
+	ln -sf ~/wiringPi/debian/wiringPi/usr/lib/libwiringPi.so.$(VERSION)	~/wiringPi/debian/wiringPi/usr/lib/libwiringPi.so
+
+.PHONY:	uninstall
 uninstall:
 	@echo "[UnInstall]"
-	@rm -f $(DESTDIR)$(PREFIX)/include/wiringPi.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/wiringSerial.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/wiringShift.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/gertboard.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/piFace.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/piNes.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/ds1302.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/softPwm.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/softTone.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/lcd.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/wiringPiSPI.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/wiringPiI2C.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/mcp23008.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/mcp23017.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/mcp23s08.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/mcp23s17.h
-	@rm -f $(DESTDIR)$(PREFIX)/include/sr595.h
-	@rm -f $(DESTDIR)$(PREFIX)/lib/libwiringPi.*
+	@cd $(DESTDIR)$(PREFIX)/include/ && rm -f $(HEADERS)
+	@cd $(DESTDIR)$(PREFIX)/lib/     && rm -f libwiringPi.*
 	@ldconfig
 
 
-.PHONEY:	depend
+.PHONY:	depend
 depend:
 	makedepend -Y $(SRC) $(SRC_I2C)
 
 # DO NOT DELETE
 
-wiringPi.o: wiringPi.h
+wiringPi.o: softPwm.h softTone.h wiringPi.h
 wiringSerial.o: wiringSerial.h
 wiringShift.o: wiringPi.h wiringShift.h
 piHiPri.o: wiringPi.h
 piThread.o: wiringPi.h
-wiringPiSPI.o: wiringPiSPI.h
+wiringPiSPI.o: wiringPi.h wiringPiSPI.h
 wiringPiI2C.o: wiringPi.h wiringPiI2C.h
 softPwm.o: wiringPi.h softPwm.h
 softTone.o: wiringPi.h softTone.h
-mcp23s08.o: wiringPi.h wiringPiSPI.h mcp23x0817.h mcp23s08.h
 mcp23008.o: wiringPi.h wiringPiI2C.h mcp23x0817.h mcp23008.h
-mcp23s17.o: wiringPi.h wiringPiSPI.h mcp23x0817.h mcp23s17.h
+mcp23016.o: wiringPi.h wiringPiI2C.h mcp23016.h mcp23016reg.h
 mcp23017.o: wiringPi.h wiringPiI2C.h mcp23x0817.h mcp23017.h
+mcp23s08.o: wiringPi.h wiringPiSPI.h mcp23x0817.h mcp23s08.h
+mcp23s17.o: wiringPi.h wiringPiSPI.h mcp23x0817.h mcp23s17.h
 sr595.o: wiringPi.h sr595.h
-piFace.o: wiringPi.h wiringPiSPI.h piFace.h mcp23x0817.h
-gertboard.o: wiringPi.h wiringPiSPI.h gertboard.h
-piNes.o: wiringPi.h piNes.h
-ds1302.o: wiringPi.h ds1302.h
-lcd.o: wiringPi.h lcd.h
+pcf8574.o: wiringPi.h wiringPiI2C.h pcf8574.h
+pcf8591.o: wiringPi.h wiringPiI2C.h pcf8591.h
+mcp3002.o: wiringPi.h wiringPiSPI.h mcp3002.h
+mcp3004.o: wiringPi.h wiringPiSPI.h mcp3004.h
+mcp4802.o: wiringPi.h wiringPiSPI.h mcp4802.h
+mcp3422.o: wiringPi.h wiringPiI2C.h mcp3422.h
+max31855.o: wiringPi.h wiringPiSPI.h max31855.h
+max5322.o: wiringPi.h wiringPiSPI.h max5322.h
+sn3218.o: wiringPi.h wiringPiI2C.h sn3218.h
+drcSerial.o: wiringPi.h wiringSerial.h drcSerial.h
+wpiExtensions.o: wiringPi.h mcp23008.h mcp23016.h mcp23017.h mcp23s08.h
+wpiExtensions.o: mcp23s17.h sr595.h pcf8574.h pcf8591.h mcp3002.h mcp3004.h
+wpiExtensions.o: mcp4802.h mcp3422.h max31855.h max5322.h sn3218.h
+wpiExtensions.o: drcSerial.h wpiExtensions.h

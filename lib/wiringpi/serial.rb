@@ -10,38 +10,38 @@ module WiringPi
       @device = device
       @baud = baud
 
-      @id = Wiringpi2.serialOpen(@device, @baud)
+      @id = Wiringpi.serialOpen(@device, @baud)
 
     end
 
     def serial_close
 
-      Wiringpi2.serialClose(@id)
+      Wiringpi.serialClose(@id)
       @id = 0
 
     end
 
     def serial_put_char(char)
 
-      Wiringpi2.serialPutchar(@id, char)
+      Wiringpi.serialPutchar(@id, char)
 
     end
 
     def serial_puts(string)
 
-      Wiringpi2.serialPuts(@id, string)
+      Wiringpi.serialPuts(@id, string)
 
     end
 
     def serial_data_avail
 
-      Wiringpi2.serialDataAvail(@id)
+      Wiringpi.serialDataAvail(@id)
 
     end
 
     def serial_get_char
 
-      Wiringpi2.serialGetchar(@id)
+      Wiringpi.serialGetchar(@id)
 
     end
 

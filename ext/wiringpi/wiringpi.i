@@ -1,17 +1,34 @@
-%module wiringpi2
+%module wiringpi
 
 %{
-#include "WiringPi/wiringPi/ds1302.h"
-#include "WiringPi/wiringPi/gertboard.h"
-#include "WiringPi/wiringPi/lcd.h"
+
+#include "WiringPi/devLib/ds1302.h"
+#include "WiringPi/devLib/font.h"
+#include "WiringPi/devLib/gertboard.h"
+#include "WiringPi/devLib/lcd128x64.h"
+#include "WiringPi/devLib/lcd.h"
+#include "WiringPi/devLib/maxdetect.h"
+#include "WiringPi/devLib/piFace.h"
+#include "WiringPi/devLib/piGlow.h"
+#include "WiringPi/devLib/piNes.h"
+#include "WiringPi/wiringPi/drcSerial.h"
+#include "WiringPi/wiringPi/max31855.h"
+#include "WiringPi/wiringPi/max5322.h"
 #include "WiringPi/wiringPi/mcp23008.h"
+#include "WiringPi/wiringPi/mcp23016.h"
+#include "WiringPi/wiringPi/mcp23016reg.h"
 #include "WiringPi/wiringPi/mcp23017.h"
 #include "WiringPi/wiringPi/mcp23s08.h"
 #include "WiringPi/wiringPi/mcp23s17.h"
 #include "WiringPi/wiringPi/mcp23x0817.h"
 #include "WiringPi/wiringPi/mcp23x08.h"
-#include "WiringPi/wiringPi/piFace.h"
-#include "WiringPi/wiringPi/piNes.h"
+#include "WiringPi/wiringPi/mcp3002.h"
+#include "WiringPi/wiringPi/mcp3004.h"
+#include "WiringPi/wiringPi/mcp3422.h"
+#include "WiringPi/wiringPi/mcp4802.h"
+#include "WiringPi/wiringPi/pcf8574.h"
+#include "WiringPi/wiringPi/pcf8591.h"
+#include "WiringPi/wiringPi/sn3218.h"
 #include "WiringPi/wiringPi/softPwm.h"
 #include "WiringPi/wiringPi/softServo.h"
 #include "WiringPi/wiringPi/softTone.h"
@@ -21,6 +38,8 @@
 #include "WiringPi/wiringPi/wiringPiSPI.h"
 #include "WiringPi/wiringPi/wiringSerial.h"
 #include "WiringPi/wiringPi/wiringShift.h"
+#include "WiringPi/wiringPi/wpiExtensions.h"
+
 %}
 
 %apply unsigned char { uint8_t };
@@ -138,6 +157,7 @@ extern void lcdPosition    (int fd, int x, int y) ;
 extern void lcdPutchar     (int fd, uint8_t data) ;
 extern void lcdPuts        (int fd, char *string) ;
 extern void lcdPrintf      (int fd, char *message, ...) ;
+
 
 extern int  lcdInit (int rows, int cols, int bits, int rs, int strb,
     int d0, int d1, int d2, int d3, int d4, int d5, int d6, int d7) ;

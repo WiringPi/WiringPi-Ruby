@@ -1801,10 +1801,10 @@ static swig_module_info swig_module = {swig_types, 5, 0, 0, 0, 0};
 
 /* -------- TYPES TABLE (END) -------- */
 
-#define SWIG_init    Init_wiringpi2
-#define SWIG_name    "Wiringpi2"
+#define SWIG_init    Init_wiringpi
+#define SWIG_name    "Wiringpi"
 
-static VALUE mWiringpi2;
+static VALUE mWiringpi;
 
 #define SWIG_RUBY_THREAD_BEGIN_BLOCK
 #define SWIG_RUBY_THREAD_END_BLOCK
@@ -1818,17 +1818,34 @@ static VALUE mWiringpi2;
 #define SWIG_as_voidptrptr(a) ((void)SWIG_as_voidptr(*a),(void**)(a)) 
 
 
-#include "WiringPi/wiringPi/ds1302.h"
-#include "WiringPi/wiringPi/gertboard.h"
-#include "WiringPi/wiringPi/lcd.h"
+
+#include "WiringPi/devLib/ds1302.h"
+#include "WiringPi/devLib/font.h"
+#include "WiringPi/devLib/gertboard.h"
+#include "WiringPi/devLib/lcd128x64.h"
+#include "WiringPi/devLib/lcd.h"
+#include "WiringPi/devLib/maxdetect.h"
+#include "WiringPi/devLib/piFace.h"
+#include "WiringPi/devLib/piGlow.h"
+#include "WiringPi/devLib/piNes.h"
+#include "WiringPi/wiringPi/drcSerial.h"
+#include "WiringPi/wiringPi/max31855.h"
+#include "WiringPi/wiringPi/max5322.h"
 #include "WiringPi/wiringPi/mcp23008.h"
+#include "WiringPi/wiringPi/mcp23016.h"
+#include "WiringPi/wiringPi/mcp23016reg.h"
 #include "WiringPi/wiringPi/mcp23017.h"
 #include "WiringPi/wiringPi/mcp23s08.h"
 #include "WiringPi/wiringPi/mcp23s17.h"
 #include "WiringPi/wiringPi/mcp23x0817.h"
 #include "WiringPi/wiringPi/mcp23x08.h"
-#include "WiringPi/wiringPi/piFace.h"
-#include "WiringPi/wiringPi/piNes.h"
+#include "WiringPi/wiringPi/mcp3002.h"
+#include "WiringPi/wiringPi/mcp3004.h"
+#include "WiringPi/wiringPi/mcp3422.h"
+#include "WiringPi/wiringPi/mcp4802.h"
+#include "WiringPi/wiringPi/pcf8574.h"
+#include "WiringPi/wiringPi/pcf8591.h"
+#include "WiringPi/wiringPi/sn3218.h"
 #include "WiringPi/wiringPi/softPwm.h"
 #include "WiringPi/wiringPi/softServo.h"
 #include "WiringPi/wiringPi/softTone.h"
@@ -1838,6 +1855,8 @@ static VALUE mWiringpi2;
 #include "WiringPi/wiringPi/wiringPiSPI.h"
 #include "WiringPi/wiringPi/wiringSerial.h"
 #include "WiringPi/wiringPi/wiringShift.h"
+#include "WiringPi/wiringPi/wpiExtensions.h"
+
 
 
 #include <limits.h>
@@ -4296,11 +4315,11 @@ SWIG_PropagateClientData(void) {
 #ifdef __cplusplus
 extern "C"
 #endif
-SWIGEXPORT void Init_wiringpi2(void) {
+SWIGEXPORT void Init_wiringpi(void) {
   size_t i;
   
   SWIG_InitRuntime();
-  mWiringpi2 = rb_define_module("Wiringpi2");
+  mWiringpi = rb_define_module("Wiringpi");
   
   SWIG_InitializeModule(0);
   for (i = 0; i < swig_module.size; i++) {
@@ -4308,71 +4327,71 @@ SWIGEXPORT void Init_wiringpi2(void) {
   }
   
   SWIG_RubyInitializeTrackings();
-  rb_define_module_function(mWiringpi2, "wiringPiSetup", _wrap_wiringPiSetup, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiSetupSys", _wrap_wiringPiSetupSys, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiSetupGpio", _wrap_wiringPiSetupGpio, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiSetupPhys", _wrap_wiringPiSetupPhys, -1);
-  rb_define_module_function(mWiringpi2, "piFaceSetup", _wrap_piFaceSetup, -1);
-  rb_define_module_function(mWiringpi2, "pinMode", _wrap_pinMode, -1);
-  rb_define_module_function(mWiringpi2, "pullUpDnControl", _wrap_pullUpDnControl, -1);
-  rb_define_module_function(mWiringpi2, "digitalRead", _wrap_digitalRead, -1);
-  rb_define_module_function(mWiringpi2, "digitalWrite", _wrap_digitalWrite, -1);
-  rb_define_module_function(mWiringpi2, "pwmWrite", _wrap_pwmWrite, -1);
-  rb_define_module_function(mWiringpi2, "analogRead", _wrap_analogRead, -1);
-  rb_define_module_function(mWiringpi2, "analogWrite", _wrap_analogWrite, -1);
-  rb_define_module_function(mWiringpi2, "piBoardRev", _wrap_piBoardRev, -1);
-  rb_define_module_function(mWiringpi2, "wpiPinToGpio", _wrap_wpiPinToGpio, -1);
-  rb_define_module_function(mWiringpi2, "physPinToGpio", _wrap_physPinToGpio, -1);
-  rb_define_singleton_method(mWiringpi2, "waitForInterrupt", _wrap_waitForInterrupt_get, 0);
-  rb_define_singleton_method(mWiringpi2, "waitForInterrupt=", _wrap_waitForInterrupt_set, 1);
-  rb_define_module_function(mWiringpi2, "wiringPiISR", _wrap_wiringPiISR, -1);
-  rb_define_module_function(mWiringpi2, "piThreadCreate", _wrap_piThreadCreate, -1);
-  rb_define_module_function(mWiringpi2, "piLock", _wrap_piLock, -1);
-  rb_define_module_function(mWiringpi2, "piUnlock", _wrap_piUnlock, -1);
-  rb_define_module_function(mWiringpi2, "piHiPri", _wrap_piHiPri, -1);
-  rb_define_module_function(mWiringpi2, "delay", _wrap_delay, -1);
-  rb_define_module_function(mWiringpi2, "delayMicroseconds", _wrap_delayMicroseconds, -1);
-  rb_define_module_function(mWiringpi2, "millis", _wrap_millis, -1);
-  rb_define_module_function(mWiringpi2, "micros", _wrap_micros, -1);
-  rb_define_module_function(mWiringpi2, "serialOpen", _wrap_serialOpen, -1);
-  rb_define_module_function(mWiringpi2, "serialClose", _wrap_serialClose, -1);
-  rb_define_module_function(mWiringpi2, "serialFlush", _wrap_serialFlush, -1);
-  rb_define_module_function(mWiringpi2, "serialPutchar", _wrap_serialPutchar, -1);
-  rb_define_module_function(mWiringpi2, "serialPuts", _wrap_serialPuts, -1);
-  rb_define_module_function(mWiringpi2, "serialPrintf", _wrap_serialPrintf, -1);
-  rb_define_module_function(mWiringpi2, "serialDataAvail", _wrap_serialDataAvail, -1);
-  rb_define_module_function(mWiringpi2, "serialGetchar", _wrap_serialGetchar, -1);
-  rb_define_module_function(mWiringpi2, "shiftOut", _wrap_shiftOut, -1);
-  rb_define_module_function(mWiringpi2, "shiftIn", _wrap_shiftIn, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiSPIGetFd", _wrap_wiringPiSPIGetFd, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiSPIDataRW", _wrap_wiringPiSPIDataRW, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiSPISetup", _wrap_wiringPiSPISetup, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CSetupInterface", _wrap_wiringPiI2CSetupInterface, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CSetup", _wrap_wiringPiI2CSetup, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CRead", _wrap_wiringPiI2CRead, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CReadReg8", _wrap_wiringPiI2CReadReg8, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CReadReg16", _wrap_wiringPiI2CReadReg16, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CWrite", _wrap_wiringPiI2CWrite, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CWriteReg8", _wrap_wiringPiI2CWriteReg8, -1);
-  rb_define_module_function(mWiringpi2, "wiringPiI2CWriteReg16", _wrap_wiringPiI2CWriteReg16, -1);
-  rb_define_module_function(mWiringpi2, "softToneCreate", _wrap_softToneCreate, -1);
-  rb_define_module_function(mWiringpi2, "softToneWrite", _wrap_softToneWrite, -1);
-  rb_define_module_function(mWiringpi2, "softServoWrite", _wrap_softServoWrite, -1);
-  rb_define_module_function(mWiringpi2, "softServoSetup", _wrap_softServoSetup, -1);
-  rb_define_module_function(mWiringpi2, "softPwmCreate", _wrap_softPwmCreate, -1);
-  rb_define_module_function(mWiringpi2, "softPwmWrite", _wrap_softPwmWrite, -1);
-  rb_define_module_function(mWiringpi2, "mcp23s17Setup", _wrap_mcp23s17Setup, -1);
-  rb_define_module_function(mWiringpi2, "mcp23017Setup", _wrap_mcp23017Setup, -1);
-  rb_define_module_function(mWiringpi2, "mcp23s08Setup", _wrap_mcp23s08Setup, -1);
-  rb_define_module_function(mWiringpi2, "mcp23008Setup", _wrap_mcp23008Setup, -1);
-  rb_define_module_function(mWiringpi2, "sr595Setup", _wrap_sr595Setup, -1);
-  rb_define_module_function(mWiringpi2, "lcdHome", _wrap_lcdHome, -1);
-  rb_define_module_function(mWiringpi2, "lcdClear", _wrap_lcdClear, -1);
-  rb_define_module_function(mWiringpi2, "lcdSendCommand", _wrap_lcdSendCommand, -1);
-  rb_define_module_function(mWiringpi2, "lcdPosition", _wrap_lcdPosition, -1);
-  rb_define_module_function(mWiringpi2, "lcdPutchar", _wrap_lcdPutchar, -1);
-  rb_define_module_function(mWiringpi2, "lcdPuts", _wrap_lcdPuts, -1);
-  rb_define_module_function(mWiringpi2, "lcdPrintf", _wrap_lcdPrintf, -1);
-  rb_define_module_function(mWiringpi2, "lcdInit", _wrap_lcdInit, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSetup", _wrap_wiringPiSetup, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSetupSys", _wrap_wiringPiSetupSys, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSetupGpio", _wrap_wiringPiSetupGpio, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSetupPhys", _wrap_wiringPiSetupPhys, -1);
+  rb_define_module_function(mWiringpi, "piFaceSetup", _wrap_piFaceSetup, -1);
+  rb_define_module_function(mWiringpi, "pinMode", _wrap_pinMode, -1);
+  rb_define_module_function(mWiringpi, "pullUpDnControl", _wrap_pullUpDnControl, -1);
+  rb_define_module_function(mWiringpi, "digitalRead", _wrap_digitalRead, -1);
+  rb_define_module_function(mWiringpi, "digitalWrite", _wrap_digitalWrite, -1);
+  rb_define_module_function(mWiringpi, "pwmWrite", _wrap_pwmWrite, -1);
+  rb_define_module_function(mWiringpi, "analogRead", _wrap_analogRead, -1);
+  rb_define_module_function(mWiringpi, "analogWrite", _wrap_analogWrite, -1);
+  rb_define_module_function(mWiringpi, "piBoardRev", _wrap_piBoardRev, -1);
+  rb_define_module_function(mWiringpi, "wpiPinToGpio", _wrap_wpiPinToGpio, -1);
+  rb_define_module_function(mWiringpi, "physPinToGpio", _wrap_physPinToGpio, -1);
+  rb_define_singleton_method(mWiringpi, "waitForInterrupt", _wrap_waitForInterrupt_get, 0);
+  rb_define_singleton_method(mWiringpi, "waitForInterrupt=", _wrap_waitForInterrupt_set, 1);
+  rb_define_module_function(mWiringpi, "wiringPiISR", _wrap_wiringPiISR, -1);
+  rb_define_module_function(mWiringpi, "piThreadCreate", _wrap_piThreadCreate, -1);
+  rb_define_module_function(mWiringpi, "piLock", _wrap_piLock, -1);
+  rb_define_module_function(mWiringpi, "piUnlock", _wrap_piUnlock, -1);
+  rb_define_module_function(mWiringpi, "piHiPri", _wrap_piHiPri, -1);
+  rb_define_module_function(mWiringpi, "delay", _wrap_delay, -1);
+  rb_define_module_function(mWiringpi, "delayMicroseconds", _wrap_delayMicroseconds, -1);
+  rb_define_module_function(mWiringpi, "millis", _wrap_millis, -1);
+  rb_define_module_function(mWiringpi, "micros", _wrap_micros, -1);
+  rb_define_module_function(mWiringpi, "serialOpen", _wrap_serialOpen, -1);
+  rb_define_module_function(mWiringpi, "serialClose", _wrap_serialClose, -1);
+  rb_define_module_function(mWiringpi, "serialFlush", _wrap_serialFlush, -1);
+  rb_define_module_function(mWiringpi, "serialPutchar", _wrap_serialPutchar, -1);
+  rb_define_module_function(mWiringpi, "serialPuts", _wrap_serialPuts, -1);
+  rb_define_module_function(mWiringpi, "serialPrintf", _wrap_serialPrintf, -1);
+  rb_define_module_function(mWiringpi, "serialDataAvail", _wrap_serialDataAvail, -1);
+  rb_define_module_function(mWiringpi, "serialGetchar", _wrap_serialGetchar, -1);
+  rb_define_module_function(mWiringpi, "shiftOut", _wrap_shiftOut, -1);
+  rb_define_module_function(mWiringpi, "shiftIn", _wrap_shiftIn, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSPIGetFd", _wrap_wiringPiSPIGetFd, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSPIDataRW", _wrap_wiringPiSPIDataRW, -1);
+  rb_define_module_function(mWiringpi, "wiringPiSPISetup", _wrap_wiringPiSPISetup, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CSetupInterface", _wrap_wiringPiI2CSetupInterface, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CSetup", _wrap_wiringPiI2CSetup, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CRead", _wrap_wiringPiI2CRead, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CReadReg8", _wrap_wiringPiI2CReadReg8, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CReadReg16", _wrap_wiringPiI2CReadReg16, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CWrite", _wrap_wiringPiI2CWrite, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CWriteReg8", _wrap_wiringPiI2CWriteReg8, -1);
+  rb_define_module_function(mWiringpi, "wiringPiI2CWriteReg16", _wrap_wiringPiI2CWriteReg16, -1);
+  rb_define_module_function(mWiringpi, "softToneCreate", _wrap_softToneCreate, -1);
+  rb_define_module_function(mWiringpi, "softToneWrite", _wrap_softToneWrite, -1);
+  rb_define_module_function(mWiringpi, "softServoWrite", _wrap_softServoWrite, -1);
+  rb_define_module_function(mWiringpi, "softServoSetup", _wrap_softServoSetup, -1);
+  rb_define_module_function(mWiringpi, "softPwmCreate", _wrap_softPwmCreate, -1);
+  rb_define_module_function(mWiringpi, "softPwmWrite", _wrap_softPwmWrite, -1);
+  rb_define_module_function(mWiringpi, "mcp23s17Setup", _wrap_mcp23s17Setup, -1);
+  rb_define_module_function(mWiringpi, "mcp23017Setup", _wrap_mcp23017Setup, -1);
+  rb_define_module_function(mWiringpi, "mcp23s08Setup", _wrap_mcp23s08Setup, -1);
+  rb_define_module_function(mWiringpi, "mcp23008Setup", _wrap_mcp23008Setup, -1);
+  rb_define_module_function(mWiringpi, "sr595Setup", _wrap_sr595Setup, -1);
+  rb_define_module_function(mWiringpi, "lcdHome", _wrap_lcdHome, -1);
+  rb_define_module_function(mWiringpi, "lcdClear", _wrap_lcdClear, -1);
+  rb_define_module_function(mWiringpi, "lcdSendCommand", _wrap_lcdSendCommand, -1);
+  rb_define_module_function(mWiringpi, "lcdPosition", _wrap_lcdPosition, -1);
+  rb_define_module_function(mWiringpi, "lcdPutchar", _wrap_lcdPutchar, -1);
+  rb_define_module_function(mWiringpi, "lcdPuts", _wrap_lcdPuts, -1);
+  rb_define_module_function(mWiringpi, "lcdPrintf", _wrap_lcdPrintf, -1);
+  rb_define_module_function(mWiringpi, "lcdInit", _wrap_lcdInit, -1);
 }
 
