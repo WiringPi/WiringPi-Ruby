@@ -1,4 +1,6 @@
 *.gem
+*.so
+*.o
 test.rb
 ext/wiringpi/WiringPi/build/
 ext/wiringpi/WiringPi/examples/
