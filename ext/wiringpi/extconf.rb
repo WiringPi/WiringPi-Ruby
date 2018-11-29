@@ -2,6 +2,7 @@ require 'mkmf'
 
 LIBDIR      = RbConfig::CONFIG['libdir']
 INCLUDEDIR  = RbConfig::CONFIG['includedir']
+$LIBRUBYARG_SHARED += " -lrt"
 
 $srcs = Dir.glob('WiringPi/wiringPi/*.c')
 $srcs += Dir.glob('WiringPi/devLib/*.c')
