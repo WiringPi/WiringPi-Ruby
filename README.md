@@ -1,3 +1,5 @@
+:warning: WiringPi was deprecated by its author in August 2019. As of 31st October 2023 nobody has shown an interest in properly maintaining it. Between this, and changes to GPIO in Rasberry Pi OS Bookworm and on the Raspberry Pi 5, this project is going nowhere. It has been archived to more clearly indicate this status.
+
 # WiringPi
 WiringPi is an implementation of most of the Arduino Wiring functions for the Raspberry Pi, this gem is a wrapper for the main wiringpi library and provides a nice OO interface with a few other handy helpers.
 
